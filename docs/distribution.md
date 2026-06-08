@@ -1,5 +1,7 @@
 # SkillOS Distribution Guide
 
+For product context before packaging or installing, read [Product Overview](product-overview.md).
+
 SkillOS is distributed in two layers:
 
 1. **Agent-facing skill/plugin layer**: installs `skills/skillos/SKILL.md`, so an agent knows when and how to call SkillOS.

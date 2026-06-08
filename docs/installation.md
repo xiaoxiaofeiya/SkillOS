@@ -2,6 +2,8 @@
 
 SkillOS can be installed directly from this GitHub repository during the public preview.
 
+If you are new to SkillOS, start with [Product Overview](product-overview.md) first. This page focuses on installation and configuration after you already know why the tool exists.
+
 There are two layers:
 
 - **Agent-facing layer**: `skills/skillos/SKILL.md`, installable with Agent Skills CLI or Claude Code plugin marketplace.
