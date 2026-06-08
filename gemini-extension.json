@@ -1,0 +1,19 @@
+{
+  "name": "skillos",
+  "version": "0.1.0",
+  "description": "Local-first skill orchestration for coding agents. Use SkillOS to discover local skills, recommend skill chains, expose MCP tools, and generate client presets.",
+  "settings": [
+    {
+      "name": "SkillOS Runtime Directory",
+      "description": "Optional local directory containing the cloned SkillOS runtime.",
+      "envVar": "SKILLOS_RUNTIME_DIR",
+      "sensitive": false
+    },
+    {
+      "name": "OpenAI API Key",
+      "description": "Optional key for SkillOS model enhancement. Local routing works without it.",
+      "envVar": "OPENAI_API_KEY",
+      "sensitive": true
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "skillos",
+  "owner": {
+    "name": "xiaoxiaofeiya",
+    "url": "https://github.com/xiaoxiaofeiya"
+  },
+  "metadata": {
+    "description": "Marketplace hosting the SkillOS local skill orchestration plugin."
+  },
+  "plugins": [
+    {
+      "name": "skillos",
+      "description": "Local-first skill orchestration for coding agents: inventory, routing, skill chains, MCP tools, presets, evals, and safety-aware decisions.",
+      "version": "0.1.0",
+      "author": {
+        "name": "xiaoxiaofeiya",
+        "url": "https://github.com/xiaoxiaofeiya"
+      },
+      "source": "./",
+      "category": "productivity",
+      "homepage": "https://github.com/xiaoxiaofeiya/SkillOS"
+    }
+  ]
+}

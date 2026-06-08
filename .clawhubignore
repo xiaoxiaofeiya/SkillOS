@@ -1,0 +1,14 @@
+# Exclude local/private and bulky artifacts from OpenClaw/ClawHub-style bundles.
+.git/
+.skillos/
+node_modules/
+dist/
+dist-presets/
+coverage/
+*.tsbuildinfo
+*.tgz
+*.log
+.env
+.env.*
+PACK_MANIFEST.json
+pack-verification.json

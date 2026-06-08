@@ -1,0 +1,7 @@
+interface:
+  display_name: "SkillOS"
+  short_description: "Route tasks to local skills and tools"
+  default_prompt: "Use $skillos to choose the right local skills before implementing this request."
+
+policy:
+  allow_implicit_invocation: true

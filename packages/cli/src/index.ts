@@ -480,6 +480,12 @@ function verifyZipListing(zipPath: string): PackVerificationReport {
   const required = [
     "skillos/README.md",
     "skillos/package.json",
+    "skillos/skills/skillos/SKILL.md",
+    "skillos/.claude-plugin/plugin.json",
+    "skillos/.claude-plugin/marketplace.json",
+    "skillos/.agents/plugins/marketplace.json",
+    "skillos/.codex-plugin/plugin.json",
+    "skillos/gemini-extension.json",
     "skillos/packages/core/package.json",
     "skillos/packages/cli/package.json",
     "skillos/packages/mcp-server/package.json",

@@ -4,9 +4,61 @@ SkillOS is a local-first skill orchestration layer for coding agents.
 
 It discovers installed skills, turns them into capability cards, recommends staged skill chains, exposes an MCP server, records redacted decisions locally, accepts feedback, runs routing evals, and generates presets for Codex, Claude Code, Cursor, Windsurf, OpenHands, OpenClaw, and OpenClaw-like clients.
 
-## Install from GitHub
+## Install
 
-### Windows
+SkillOS has two install layers:
+
+- **Agent Skill / plugin entry**: teaches your agent when and how to call SkillOS.
+- **Local runtime**: installs the `skillos` CLI and `skillos-mcp-server`.
+
+For the best experience, install both.
+
+| Surface | Install | Update |
+| --- | --- | --- |
+| Agent Skills hosts: Codex, Cursor, Gemini CLI, Copilot, Windsurf, and others | `npx skills add xiaoxiaofeiya/SkillOS -g` | `npx skills update skillos -g` |
+| Claude Code plugin marketplace | `/plugin marketplace add xiaoxiaofeiya/SkillOS` then `/plugin install skillos` | `/plugin update skillos` |
+| Windows runtime | Use the PowerShell command below | Run the same command again |
+| macOS/Linux runtime | Use the shell command below | Run the same command again |
+| GitHub source install | Clone the repo, then run `scripts/install.ps1` or `scripts/install.sh` | `git pull --ff-only`, then rerun the installer |
+| Zip preview package | Download `skillos.zip`, extract, then run `npm run install:local` | Download the latest zip |
+
+More details: [docs/distribution.md](docs/distribution.md) and [docs/installation.md](docs/installation.md).
+
+## Quick Start
+
+Install the agent-facing skill:
+
+```bash
+npx skills add xiaoxiaofeiya/SkillOS -g
+```
+
+Install the local runtime on Windows:
+
+```powershell
+irm https://raw.githubusercontent.com/xiaoxiaofeiya/SkillOS/main/scripts/install-from-github.ps1 | iex
+```
+
+Install the local runtime on macOS/Linux:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/xiaoxiaofeiya/SkillOS/main/scripts/install-from-github.sh | bash
+```
+
+Then run:
+
+```bash
+skillos doctor
+skillos setup --safety approve
+skillos inventory
+skillos recommend "Make this UI professional and verify it in a browser"
+skillos explain --last
+```
+
+Use `--format json` on any command when another agent or script needs stable machine-readable output.
+
+## Install from Source
+
+### Windows Source Install
 
 ```powershell
 git clone https://github.com/xiaoxiaofeiya/SkillOS.git
@@ -14,7 +66,7 @@ cd SkillOS
 powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1
 ```
 
-### macOS/Linux
+### macOS/Linux Source Install
 
 ```bash
 git clone https://github.com/xiaoxiaofeiya/SkillOS.git
@@ -29,23 +81,6 @@ Run without global command linking:
 ```bash
 node scripts/install-local.mjs --no-link
 ```
-
-More details: [docs/installation.md](docs/installation.md).
-
-## Public Preview Quick Start
-
-```bash
-npm install
-npm run build
-npm link
-skillos setup --safety approve
-skillos inventory
-skillos recommend "Make this UI professional and verify it in a browser"
-skillos explain --last
-skillos eval run
-```
-
-Use `--format json` on any command when another agent or script needs stable machine-readable output.
 
 ## What Setup Does
 

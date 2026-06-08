@@ -2,11 +2,57 @@
 
 SkillOS can be installed directly from this GitHub repository during the public preview.
 
+There are two layers:
+
+- **Agent-facing layer**: `skills/skillos/SKILL.md`, installable with Agent Skills CLI or Claude Code plugin marketplace.
+- **Local runtime layer**: `skillos` CLI and `skillos-mcp-server`, installed with the GitHub bootstrap scripts or from source.
+
+Install both layers when you want agents to automatically know when to use SkillOS and also have working local commands.
+
 ## Requirements
 
 - Node.js 20 or newer
 - npm
 - Git, if installing by clone
+
+## Agent Skill Install
+
+For Codex, Cursor, Copilot, Gemini CLI, Windsurf, and other Agent Skills-compatible hosts:
+
+```bash
+npx skills add xiaoxiaofeiya/SkillOS -g
+```
+
+Update later:
+
+```bash
+npx skills update skillos -g
+```
+
+For Claude Code plugin marketplace:
+
+```text
+/plugin marketplace add xiaoxiaofeiya/SkillOS
+/plugin install skillos
+```
+
+The agent skill/plugin install teaches the host how to invoke SkillOS. It does not replace the local runtime install below.
+
+## Windows One-Line Runtime Install
+
+```powershell
+irm https://raw.githubusercontent.com/xiaoxiaofeiya/SkillOS/main/scripts/install-from-github.ps1 | iex
+```
+
+This clones or updates the repository under `%LOCALAPPDATA%\SkillOS`, installs dependencies, builds the workspace, links commands, and runs setup.
+
+## macOS/Linux One-Line Runtime Install
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/xiaoxiaofeiya/SkillOS/main/scripts/install-from-github.sh | bash
+```
+
+This clones or updates the repository under `~/.local/share/skillos`, installs dependencies, builds the workspace, links commands, and runs setup.
 
 ## Windows Quick Install
 
@@ -30,13 +76,13 @@ Install only selected clients:
 powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1 -Clients "codex,cursor,openclaw"
 ```
 
-## Windows One-Step GitHub Bootstrap
+## Windows Bootstrap From A Local Checkout
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\install-from-github.ps1
 ```
 
-If running from outside the repository, download `scripts/install-from-github.ps1` first or run it from a cloned checkout.
+If running from outside the repository, use the one-line runtime install above.
 
 ## macOS/Linux Quick Install
 
