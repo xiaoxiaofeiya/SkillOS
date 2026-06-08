@@ -4,16 +4,45 @@ SkillOS is a local-first skill orchestration layer for coding agents.
 
 It discovers installed skills, turns them into capability cards, recommends staged skill chains, exposes an MCP server, records redacted decisions locally, accepts feedback, runs routing evals, and generates presets for Codex, Claude Code, Cursor, Windsurf, OpenHands, OpenClaw, and OpenClaw-like clients.
 
+## Install from GitHub
+
+### Windows
+
+```powershell
+git clone https://github.com/xiaoxiaofeiya/SkillOS.git
+cd SkillOS
+powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1
+```
+
+### macOS/Linux
+
+```bash
+git clone https://github.com/xiaoxiaofeiya/SkillOS.git
+cd SkillOS
+bash scripts/install.sh
+```
+
+The installer runs `npm install`, builds the workspace, links the `skillos` and `skillos-mcp-server` commands, and generates local client presets with `skillos setup --safety approve`.
+
+Run without global command linking:
+
+```bash
+node scripts/install-local.mjs --no-link
+```
+
+More details: [docs/installation.md](docs/installation.md).
+
 ## Public Preview Quick Start
 
 ```bash
 npm install
 npm run build
-node packages/cli/dist/index.js setup --safety approve
-node packages/cli/dist/index.js inventory
-node packages/cli/dist/index.js recommend "Make this UI professional and verify it in a browser"
-node packages/cli/dist/index.js explain --last
-node packages/cli/dist/index.js eval run
+npm link
+skillos setup --safety approve
+skillos inventory
+skillos recommend "Make this UI professional and verify it in a browser"
+skillos explain --last
+skillos eval run
 ```
 
 Use `--format json` on any command when another agent or script needs stable machine-readable output.
@@ -27,25 +56,25 @@ It does not apply real client config files by default.
 Review a client preset:
 
 ```bash
-node packages/cli/dist/index.js preset diff --client codex
+skillos preset diff --client codex
 ```
 
 Apply only after review:
 
 ```bash
-node packages/cli/dist/index.js preset apply --client codex --confirm
+skillos preset apply --client codex --confirm
 ```
 
 ## Common Commands
 
 ```bash
-node packages/cli/dist/index.js doctor
-node packages/cli/dist/index.js inventory
-node packages/cli/dist/index.js recommend "Deploy this app safely"
-node packages/cli/dist/index.js explain --last
-node packages/cli/dist/index.js feedback --decision <id> --prefer playwright --avoid vercel-deploy
-node packages/cli/dist/index.js presets --out dist-presets
-node packages/cli/dist/index.js pack verify
+skillos doctor
+skillos inventory
+skillos recommend "Deploy this app safely"
+skillos explain --last
+skillos feedback --decision <id> --prefer playwright --avoid vercel-deploy
+skillos presets --out dist-presets
+skillos pack verify
 ```
 
 ## Packages
@@ -107,10 +136,11 @@ If credentials are missing or a request fails, SkillOS falls back to local routi
 Build and verify:
 
 ```bash
-npm test
-npm run pack:zip
-node packages/cli/dist/index.js pack verify
-npm run pack:npm
+npm run release:local
 ```
 
 The zip package excludes `.skillos/`, local logs, credentials, `node_modules`, TypeScript build-info files, and local path metadata.
+
+GitHub Actions builds and uploads `dist/skillos.zip` as a workflow artifact. Tags matching `v*` create a GitHub release with the zip attached.
+
+Release details: [docs/release.md](docs/release.md).

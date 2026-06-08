@@ -12,13 +12,19 @@
   "workspaces": [
     "packages/*"
   ],
+  "bin": {
+    "skillos": "./packages/cli/dist/index.js",
+    "skillos-mcp-server": "./packages/mcp-server/dist/index.js"
+  },
   "scripts": {
     "build": "tsc -b packages/core packages/adapters packages/mcp-server packages/cli",
     "clean": "node scripts/clean.mjs",
+    "install:local": "node scripts/install-local.mjs",
     "test": "npm run build && node --test tests/*.mjs",
     "pack:zip": "node scripts/package-zip.mjs",
     "pack:verify": "node packages/cli/dist/index.js pack verify --format json",
     "pack:npm": "npm pack --dry-run --workspaces",
+    "release:local": "npm test && npm run pack:zip && npm run pack:verify && npm run pack:npm",
     "doctor": "node packages/cli/dist/index.js doctor",
     "inventory": "node packages/cli/dist/index.js inventory",
     "recommend": "node packages/cli/dist/index.js recommend"

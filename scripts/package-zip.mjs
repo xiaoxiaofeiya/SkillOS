@@ -71,12 +71,14 @@ const manifest = await buildManifest(bundle);
 await writeFile(join(bundle, "PACK_MANIFEST.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 
 const zipPath = join(dist, "skillos.zip");
-const ps = spawnSync("powershell", [
-  "-NoProfile",
-  "-Command",
-  `Compress-Archive -LiteralPath '${bundle.replace(/'/g, "''")}' -DestinationPath '${zipPath.replace(/'/g, "''")}' -Force`
-], { stdio: "inherit" });
-if (ps.status !== 0) process.exit(ps.status ?? 1);
+const zipResult = process.platform === "win32"
+  ? spawnSync("powershell", [
+      "-NoProfile",
+      "-Command",
+      `Compress-Archive -LiteralPath '${bundle.replace(/'/g, "''")}' -DestinationPath '${zipPath.replace(/'/g, "''")}' -Force`
+    ], { stdio: "inherit" })
+  : spawnSync("zip", ["-qr", zipPath, "skillos"], { cwd: dist, stdio: "inherit" });
+if (zipResult.status !== 0) process.exit(zipResult.status ?? 1);
 
 const verification = {
   zipPath,

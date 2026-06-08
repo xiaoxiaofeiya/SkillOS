@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-test-package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm test
+
+      - name: Build zip
+        run: npm run pack:zip
+
+      - name: Verify zip
+        run: node packages/cli/dist/index.js pack verify --format json
+
+      - name: npm pack dry run
+        run: npm run pack:npm
+
+      - name: Upload zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: skillos-public-preview
+          path: |
+            dist/skillos.zip
+            dist/pack-verification.json
