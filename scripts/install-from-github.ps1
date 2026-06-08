@@ -1,5 +1,5 @@
 param(
-  [string]$InstallDir = "$env:LOCALAPPDATA\SkillOS",
+  [string]$InstallDir = "",
 
   [ValidateSet("suggest", "approve", "auto")]
   [string]$Safety = "approve",
@@ -13,6 +13,14 @@ param(
 
 $ErrorActionPreference = "Stop"
 $Repo = "https://github.com/xiaoxiaofeiya/SkillOS.git"
+
+if (-not $InstallDir) {
+  if ($env:SKILLOS_INSTALL_DIR) {
+    $InstallDir = $env:SKILLOS_INSTALL_DIR
+  } else {
+    $InstallDir = Join-Path $env:LOCALAPPDATA "SkillOS"
+  }
+}
 
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
   throw "Git is required for this installer. Install Git, or download the repository zip from GitHub."

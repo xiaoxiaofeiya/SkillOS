@@ -34,6 +34,12 @@ jobs:
       - name: Verify zip
         run: node packages/cli/dist/index.js pack verify --format json
 
+      - name: Verify isolated installation
+        run: npm run verify:install
+
+      - name: Verify network installation paths
+        run: npm run verify:install:network
+
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:

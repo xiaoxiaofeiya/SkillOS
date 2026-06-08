@@ -24,7 +24,9 @@
     "pack:zip": "node scripts/package-zip.mjs",
     "pack:verify": "node packages/cli/dist/index.js pack verify --format json",
     "pack:npm": "npm pack --dry-run --workspaces",
-    "release:local": "npm test && npm run pack:zip && npm run pack:verify && npm run pack:npm",
+    "verify:install": "node scripts/verify-installation.mjs",
+    "verify:install:network": "node scripts/verify-installation.mjs --network --network-only",
+    "release:local": "npm test && npm run pack:zip && npm run pack:verify && npm run pack:npm && npm run verify:install",
     "doctor": "node packages/cli/dist/index.js doctor",
     "inventory": "node packages/cli/dist/index.js inventory",
     "recommend": "node packages/cli/dist/index.js recommend"

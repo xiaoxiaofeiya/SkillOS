@@ -69,6 +69,7 @@ await writeFile(join(bundle, "INSTALL.txt"), [
   "Optional global command linking:",
   "  npm link",
   "  skillos doctor",
+  "  Windows PowerShell fallback: skillos.cmd doctor",
   "",
   "Verify package after creating dist/skillos.zip:",
   "  node packages/cli/dist/index.js pack verify",

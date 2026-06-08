@@ -45,6 +45,20 @@ test("Gemini and OpenClaw distribution metadata avoid bundled secrets", async ()
   }
 });
 
+test("installation verification scripts are exposed", async () => {
+  const rootPackage = JSON.parse(await readFile(join(repoRoot, "package.json"), "utf8"));
+  assert.equal(rootPackage.scripts["verify:install"], "node scripts/verify-installation.mjs");
+  assert.equal(rootPackage.scripts["verify:install:network"], "node scripts/verify-installation.mjs --network --network-only");
+  assert.match(rootPackage.scripts["release:local"], /verify:install/);
+
+  const verifier = await readFile(join(repoRoot, "scripts", "verify-installation.mjs"), "utf8");
+  assert.match(verifier, /agent-skills-local-install-codex/);
+  assert.match(verifier, /real-user-directory-safety/);
+
+  const powershellBootstrap = await readFile(join(repoRoot, "scripts", "install-from-github.ps1"), "utf8");
+  assert.match(powershellBootstrap, /SKILLOS_INSTALL_DIR/);
+});
+
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

@@ -47,6 +47,26 @@ skillos recommend "Make this app production-ready and verify it"
 skillos explain --last
 ```
 
+On Windows PowerShell, use `skillos.cmd` if execution policy blocks npm-generated `.ps1` shims.
+
+## Verified Paths
+
+Run the isolated verifier before sharing a build:
+
+```bash
+npm run verify:install
+```
+
+The verifier creates temporary HOME/USERPROFILE, npm prefix/cache, install roots, and zip extraction directories. It checks local Agent Skills install, local runtime install, linked command shims, zip install, CLI smoke tests, and Claude marketplace metadata without writing to real global skills or client files.
+
+Network-dependent verification is separate:
+
+```bash
+npm run verify:install:network
+```
+
+`network_failed` means the remote GitHub/npm path failed because of connectivity, reset, timeout, proxy, DNS, TLS, or clone errors. Treat that differently from `fail`, which means the repository or installer is invalid.
+
 ## Claude Code Path
 
 Claude Code can install the plugin entry from GitHub:
@@ -123,3 +143,11 @@ skillos preset apply --client codex --confirm
 ```
 
 SkillOS stores local state in `.skillos/`. That directory is private local data and must not be included in release bundles.
+
+## Fallbacks
+
+If `npx skills add xiaoxiaofeiya/SkillOS -g` or the one-line GitHub bootstrap fails because GitHub clone is unstable, use one of these paths:
+
+- Manually clone the repository, then run `scripts/install.ps1` or `scripts/install.sh`.
+- Download the latest `skillos.zip`, extract it, run `npm ci`, `npm run build`, and `node packages/cli/dist/index.js setup --safety approve`.
+- Install only the agent-facing skill from a local clone with `npx skills add . -g -a codex --skill skillos --copy`.

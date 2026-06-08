@@ -54,7 +54,31 @@ skillos recommend "Make this UI professional and verify it in a browser"
 skillos explain --last
 ```
 
+On Windows PowerShell, use `skillos.cmd` instead of `skillos` if execution policy blocks npm-generated `.ps1` shims:
+
+```powershell
+skillos.cmd doctor
+```
+
 Use `--format json` on any command when another agent or script needs stable machine-readable output.
+
+## Verified Install Paths
+
+This repository includes an isolated install verifier:
+
+```bash
+npm run verify:install
+```
+
+It tests the local Agent Skills path, local runtime install, linked commands with a temporary npm prefix, zip extraction, CLI smoke tests, and Claude marketplace metadata without writing to your real global skill or client configuration.
+
+Network-dependent checks are separate:
+
+```bash
+npm run verify:install:network
+```
+
+If GitHub clone or remote `npx skills add xiaoxiaofeiya/SkillOS` fails because of a reset, timeout, proxy, or TLS issue, use the source install or the release zip path below. The runtime and agent-facing skill are separate layers; `npx skills add` installs the agent entry, while the runtime installer provides the `skillos` and `skillos-mcp-server` commands.
 
 ## Install from Source
 
@@ -174,7 +198,7 @@ Build and verify:
 npm run release:local
 ```
 
-The zip package excludes `.skillos/`, local logs, credentials, `node_modules`, TypeScript build-info files, and local path metadata.
+The zip package excludes `.skillos/`, local logs, credentials, `node_modules`, TypeScript build-info files, and local path metadata. `release:local` also runs isolated installation verification.
 
 GitHub Actions builds and uploads `dist/skillos.zip` as a workflow artifact. Tags matching `v*` create a GitHub release with the zip attached.
 

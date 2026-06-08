@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { existsSync } from "node:fs";
+import { existsSync, realpathSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -554,8 +554,25 @@ Use --format json for stable machine-readable output.
 `);
 }
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+if (isDirectEntrypoint(import.meta.url)) {
   main().then((code) => {
     process.exitCode = code;
   });
+}
+
+function isDirectEntrypoint(importMetaUrl: string): boolean {
+  if (!process.argv[1]) return false;
+  try {
+    const current = realpathSync(fileURLToPath(importMetaUrl));
+    const invoked = realpathSync(process.argv[1]);
+    return process.platform === "win32"
+      ? current.toLowerCase() === invoked.toLowerCase()
+      : current === invoked;
+  } catch {
+    const current = fileURLToPath(importMetaUrl);
+    const invoked = process.argv[1];
+    return process.platform === "win32"
+      ? current.toLowerCase() === invoked.toLowerCase()
+      : current === invoked;
+  }
 }

@@ -32,10 +32,15 @@ run(npm, ["run", "build"]);
 
 if (link) {
   run(npm, ["link"]);
+  const skillosCommand = process.platform === "win32" ? "skillos.cmd" : "skillos";
+  const mcpCommand = process.platform === "win32" ? "skillos-mcp-server.cmd" : "skillos-mcp-server";
   console.log("");
   console.log("Global commands linked:");
-  console.log("  skillos");
-  console.log("  skillos-mcp-server");
+  console.log(`  ${skillosCommand}`);
+  console.log(`  ${mcpCommand}`);
+  if (process.platform === "win32") {
+    console.log("Use the .cmd command names in PowerShell if script execution policy blocks npm .ps1 shims.");
+  }
 } else {
   console.log("Skipped global command linking because --no-link was provided.");
 }
@@ -49,9 +54,10 @@ if (setup) {
 console.log("");
 console.log("Next commands:");
 if (link) {
-  console.log("  skillos doctor");
-  console.log("  skillos recommend \"Make this UI professional and verify it\"");
-  console.log("  skillos preset diff --client codex");
+  const skillosCommand = process.platform === "win32" ? "skillos.cmd" : "skillos";
+  console.log(`  ${skillosCommand} doctor`);
+  console.log(`  ${skillosCommand} recommend "Make this UI professional and verify it"`);
+  console.log(`  ${skillosCommand} preset diff --client codex`);
 } else {
   console.log("  node packages/cli/dist/index.js doctor");
   console.log("  node packages/cli/dist/index.js recommend \"Make this UI professional and verify it\"");
@@ -63,7 +69,8 @@ function run(command, commandArgs, options = {}) {
   const result = spawnSync(invocation.command, invocation.args, {
     cwd: options.cwd ?? repoRoot,
     stdio: "inherit",
-    shell: false
+    shell: false,
+    windowsVerbatimArguments: invocation.windowsVerbatimArguments ?? false
   });
   if (result.status !== 0) {
     fail(`Command failed: ${command} ${commandArgs.join(" ")}`);
@@ -74,16 +81,17 @@ function windowsCmdInvocation(command, commandArgs) {
   if (process.platform !== "win32" || !command.endsWith(".cmd")) {
     return { command, args: commandArgs };
   }
-  const line = [command, ...commandArgs].map(quoteForCmd).join(" ");
+  const line = ["call", command, ...commandArgs].map(quoteForCmd).join(" ");
   return {
     command: process.env.ComSpec ?? "cmd.exe",
-    args: ["/d", "/s", "/c", line]
+    args: ["/d", "/c", line],
+    windowsVerbatimArguments: true
   };
 }
 
 function quoteForCmd(value) {
   if (/^[A-Za-z0-9_./:=+-]+$/.test(value)) return value;
-  return `"${value.replace(/"/g, '\\"')}"`;
+  return `"${value.replace(/"/g, '""')}"`;
 }
 
 function fail(message) {

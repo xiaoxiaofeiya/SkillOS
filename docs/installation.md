@@ -38,6 +38,24 @@ For Claude Code plugin marketplace:
 
 The agent skill/plugin install teaches the host how to invoke SkillOS. It does not replace the local runtime install below.
 
+## Verify Installability
+
+Before sharing a build, run the isolated verifier:
+
+```bash
+npm run verify:install
+```
+
+It uses temporary HOME/USERPROFILE, temporary npm prefix/cache, temporary install roots, and temporary zip extraction directories. It verifies that the repository can be installed without writing to real global skills or real client config.
+
+Network-dependent paths are checked separately:
+
+```bash
+npm run verify:install:network
+```
+
+If the network verifier reports `network_failed`, the repository may still be valid. Common causes are GitHub clone reset, proxy, TLS, DNS, or timeout failures. In that case, use the source install after a successful manual clone, or download the release zip.
+
 ## Windows One-Line Runtime Install
 
 ```powershell
@@ -115,6 +133,17 @@ node packages/cli/dist/index.js doctor
 node packages/cli/dist/index.js setup --safety approve
 ```
 
+## Zip Fallback
+
+If GitHub cloning is unreliable, download `skillos.zip` from the latest release, extract it, then run:
+
+```bash
+npm ci
+npm run build
+node packages/cli/dist/index.js setup --safety approve
+node packages/cli/dist/index.js doctor --format json
+```
+
 ## Configure Clients
 
 Setup writes generated presets to `.skillos/generated-presets/` and shows the planned real client config changes.
@@ -153,4 +182,11 @@ Use JSON output for agents and scripts:
 
 ```bash
 skillos doctor --format json
+```
+
+On Windows PowerShell, npm may generate a `skillos.ps1` shim that is blocked by execution policy. In that case, use the `.cmd` shim:
+
+```powershell
+skillos.cmd doctor
+skillos.cmd setup --safety approve
 ```
