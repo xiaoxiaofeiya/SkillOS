@@ -1,0 +1,33 @@
+{
+  "name": "skillos-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local-first skill orchestration layer for coding agents.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaoxiaofeiya/SkillOS.git"
+  },
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "tsc -b packages/core packages/adapters packages/mcp-server packages/cli",
+    "clean": "node scripts/clean.mjs",
+    "test": "npm run build && node --test tests/*.mjs",
+    "pack:zip": "node scripts/package-zip.mjs",
+    "pack:verify": "node packages/cli/dist/index.js pack verify --format json",
+    "pack:npm": "npm pack --dry-run --workspaces",
+    "doctor": "node packages/cli/dist/index.js doctor",
+    "inventory": "node packages/cli/dist/index.js inventory",
+    "recommend": "node packages/cli/dist/index.js recommend"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.8.3"
+  }
+}

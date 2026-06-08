@@ -1,0 +1,49 @@
+{
+  "name": "@skillos/cli",
+  "version": "0.1.0",
+  "description": "Command-line interface for SkillOS setup, inventory, routing, presets, evals, and pack verification.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaoxiaofeiya/SkillOS.git",
+    "directory": "packages/cli"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "skillos": "dist/index.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@skillos/core": "0.1.0",
+    "@skillos/adapters": "0.1.0",
+    "@skillos/mcp-server": "0.1.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "keywords": [
+    "cli",
+    "skills",
+    "agents",
+    "mcp",
+    "codex"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

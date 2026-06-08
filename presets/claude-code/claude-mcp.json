@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "skillos": {
+      "command": "skillos-mcp-server",
+      "args": [
+        "--client",
+        "claude-code"
+      ]
+    }
+  }
+}

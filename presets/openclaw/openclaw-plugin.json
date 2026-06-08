@@ -1,0 +1,21 @@
+{
+  "name": "skillos",
+  "displayName": "SkillOS",
+  "version": "0.1.0",
+  "description": "Progressive skill discovery and orchestration for OpenClaw and OpenClaw-like clients.",
+  "capabilities": [
+    "skills",
+    "plugins",
+    "hooks",
+    "mcp",
+    "acp",
+    "gateway"
+  ],
+  "mcp": {
+    "command": "skillos-mcp-server",
+    "args": [
+      "--client",
+      "openclaw"
+    ]
+  }
+}

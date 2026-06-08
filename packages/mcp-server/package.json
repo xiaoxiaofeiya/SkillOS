@@ -1,0 +1,48 @@
+{
+  "name": "@skillos/mcp-server",
+  "version": "0.1.0",
+  "description": "JSON-RPC stdio MCP server exposing SkillOS progressive skill discovery and routing tools.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaoxiaofeiya/SkillOS.git",
+    "directory": "packages/mcp-server"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "skillos-mcp-server": "dist/index.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@skillos/core": "0.1.0",
+    "@skillos/adapters": "0.1.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "skills",
+    "agents",
+    "codex"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

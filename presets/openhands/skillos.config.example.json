@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "safetyProfile": "approve",
+  "telemetry": false,
+  "modelEnhancement": {
+    "enabled": false,
+    "provider": "openai-compatible",
+    "apiKeyEnv": "OPENAI_API_KEY",
+    "baseUrl": "https://api.openai.com/v1",
+    "embeddingModel": "text-embedding-3-small",
+    "maxCandidates": 24,
+    "enableLlmRerank": false,
+    "enableSummaries": false,
+    "enableFailureReview": false,
+    "llmModel": "",
+    "chatCompletionsPath": "/chat/completions"
+  },
+  "clients": {
+    "codex": {
+      "enabled": true
+    },
+    "claude-code": {
+      "enabled": true
+    },
+    "cursor": {
+      "enabled": true
+    },
+    "windsurf": {
+      "enabled": true
+    },
+    "openhands": {
+      "enabled": true
+    },
+    "openclaw": {
+      "enabled": true
+    }
+  }
+}
