@@ -141,8 +141,9 @@ async function runGate(name, command, commandArgs, timeoutMs) {
 async function verifyCleanGitState() {
   try {
     const remote = run("git", ["remote", "get-url", "origin"]);
-    if (remote.stdout.trim() !== REPO_URL) {
-      add("git-remote", "fail", { message: "origin remote does not point at the SkillOS public repo.", origin: remote.stdout.trim() });
+    const origin = remote.stdout.trim();
+    if (normalizeGitRemote(origin) !== normalizeGitRemote(REPO_URL)) {
+      add("git-remote", "fail", { message: "origin remote does not point at the SkillOS public repo.", origin });
       return;
     }
     const status = run("git", ["status", "--porcelain"]);
@@ -150,7 +151,7 @@ async function verifyCleanGitState() {
       add("git-worktree-clean", "fail", { message: "worktree must be clean before live publish.", status: status.stdout.trim() });
       return;
     }
-    add("git-worktree-clean", "pass", { origin: remote.stdout.trim() });
+    add("git-worktree-clean", "pass", { origin });
   } catch (err) {
     add("git-worktree-clean", "fail", errorDetails(err));
   }
@@ -377,6 +378,15 @@ function summarize(text) {
 
 function stripAnsi(text) {
   return String(text).replace(/\x1B\[[0-?]*[ -/]*[@-~]/g, "");
+}
+
+function normalizeGitRemote(value) {
+  return String(value)
+    .trim()
+    .replace(/^git\+/, "")
+    .replace(/\.git$/, "")
+    .replace(/\/$/, "")
+    .toLowerCase();
 }
 
 function formatCommand(command, args) {

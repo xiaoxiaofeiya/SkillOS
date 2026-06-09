@@ -11,7 +11,7 @@ test("repository exposes an Agent Skills compatible SkillOS entry", async () => 
   const skillPath = join(repoRoot, "skills", "skillos", "SKILL.md");
   assert.equal(existsSync(skillPath), true);
   const text = await readFile(skillPath, "utf8");
-  assert.match(text, /^---\nname: skillos\n/m);
+  assert.match(text, /^---\r?\nname: skillos\r?\n/m);
   assert.match(text, /description: "Use SkillOS as a local-first orchestration layer/);
   assert.match(text, /skillos recommend "<concrete task>"/);
   assert.equal(existsSync(join(repoRoot, "skills", "skillos", "scripts", "install-runtime.mjs")), true);

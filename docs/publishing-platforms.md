@@ -59,7 +59,7 @@ The script is allowed to create and push `v0.1.0-preview.1`. It must not claim a
 Agent Skills:
 
 ```bash
-npx skills add xiaoxiaofeiya/SkillOS -l --full-depth
+npx skills add xiaoxiaofeiya/SkillOS -l -a codex --full-depth
 npx skills add xiaoxiaofeiya/SkillOS -g -a codex --skill skillos --copy
 ```
 

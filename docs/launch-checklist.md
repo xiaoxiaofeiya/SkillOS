@@ -41,7 +41,7 @@ Expected:
 Validate Agent Skills:
 
 ```bash
-npx skills add xiaoxiaofeiya/SkillOS -l --full-depth
+npx skills add xiaoxiaofeiya/SkillOS -l -a codex --full-depth
 npx skills add xiaoxiaofeiya/SkillOS -g -a codex --skill skillos --copy
 ```
 

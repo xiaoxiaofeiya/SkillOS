@@ -75,7 +75,7 @@ process.exitCode = report.ok ? 0 : 1;
 async function verifyAgentSkillsLocalList() {
   await step("agent-skills-local-list", async () => {
     const env = isolatedEnv("agent-list");
-    const result = run(npxBin(), ["--yes", "skills", "add", ".", "-l", "--full-depth"], {
+    const result = run(npxBin(), ["--yes", "skills", "add", ".", "-l", "-a", "codex", "--full-depth"], {
       cwd: repoRoot,
       env,
       timeoutMs: 120000
@@ -260,7 +260,7 @@ async function verifyClaudeMarketplaceStatic() {
 async function verifyAgentSkillsRemoteList() {
   await step("agent-skills-remote-list", async () => {
     const env = isolatedEnv("agent-remote-list");
-    const result = run(npxBin(), ["--yes", "skills", "add", "xiaoxiaofeiya/SkillOS", "-l", "--full-depth"], {
+    const result = run(npxBin(), ["--yes", "skills", "add", "xiaoxiaofeiya/SkillOS", "-l", "-a", "codex", "--full-depth"], {
       cwd: repoRoot,
       env,
       timeoutMs: 240000

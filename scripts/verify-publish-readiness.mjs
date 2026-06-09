@@ -157,7 +157,7 @@ async function checkMcpMetadata() {
 async function checkAgentSkill() {
   await step("agent-skill", async () => {
     const text = await readText("skills/skillos/SKILL.md");
-    assert(/^---\nname:\s*skillos\n/m.test(text), "SkillOS SKILL.md must expose name: skillos.");
+    assert(/^---\r?\nname:\s*skillos\r?\n/m.test(text), "SkillOS SKILL.md must expose name: skillos.");
     assert(text.includes("skillos recommend \"<concrete task>\""), "SkillOS skill must document skillos recommend.");
     assert(text.includes("allowed-tools:"), "SkillOS skill must declare allowed tools.");
     return { skill: "skills/skillos/SKILL.md" };
@@ -190,9 +190,19 @@ async function checkTools() {
 async function checkGitRemote() {
   await step("git-remote", async () => {
     const remote = run("git", ["remote", "get-url", "origin"]);
-    assert(remote.stdout.trim() === `${REPO_URL}.git`, "origin remote must point at the public SkillOS repo.", { remote: remote.stdout.trim() });
-    return { origin: remote.stdout.trim() };
+    const origin = remote.stdout.trim();
+    assert(normalizeGitRemote(origin) === normalizeGitRemote(REPO_URL), "origin remote must point at the public SkillOS repo.", { remote: origin });
+    return { origin };
   });
+}
+
+function normalizeGitRemote(value) {
+  return String(value)
+    .trim()
+    .replace(/^git\+/, "")
+    .replace(/\.git$/, "")
+    .replace(/\/$/, "")
+    .toLowerCase();
 }
 
 async function step(name, action) {
