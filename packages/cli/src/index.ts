@@ -508,8 +508,8 @@ function verifyZipListing(zipPath: string): PackVerificationReport {
       missingRequired: required
     };
   }
-  const result = spawnSync("tar", ["-tf", zipPath], { encoding: "utf8" });
-  const entries = result.stdout.split(/\r?\n/).filter(Boolean).map((entry) => entry.replace(/\\/g, "/"));
+  const listing = listZipEntries(zipPath);
+  const entries = listing.stdout.split(/\r?\n/).filter(Boolean).map((entry) => entry.replace(/\\/g, "/"));
   const forbiddenPatterns = [
     /(^|\/)\.skillos(\/|$)/,
     /(^|\/)node_modules(\/|$)/,
@@ -525,14 +525,33 @@ function verifyZipListing(zipPath: string): PackVerificationReport {
   const requiredMatches = required.filter((entry) => entries.includes(entry));
   const missingRequired = required.filter((entry) => !entries.includes(entry));
   return {
-    ok: result.status === 0 && forbiddenMatches.length === 0 && missingRequired.length === 0,
+    ok: listing.status === 0 && forbiddenMatches.length === 0 && missingRequired.length === 0,
     zipPath,
     checkedAt: new Date().toISOString(),
     entries: entries.length,
-    forbiddenMatches,
+    forbiddenMatches: listing.status === 0 ? forbiddenMatches : [`zip listing failed: ${listing.stderr || listing.stdout || listing.command}`],
     requiredMatches,
     missingRequired
   };
+}
+
+function listZipEntries(zipPath: string): { command: string; status: number | null; stdout: string; stderr: string } {
+  const command = commandExists("unzip") ? "unzip" : "tar";
+  const args = command === "unzip" ? ["-Z1", zipPath] : ["-tf", zipPath];
+  const result = spawnSync(command, args, { encoding: "utf8" });
+  return {
+    command: [command, ...args].join(" "),
+    status: result.status,
+    stdout: result.stdout ?? "",
+    stderr: result.stderr ?? result.error?.message ?? ""
+  };
+}
+
+function commandExists(command: string): boolean {
+  const checker = process.platform === "win32" ? "where" : "command";
+  const checkerArgs = process.platform === "win32" ? [command] : ["-v", command];
+  const result = spawnSync(checker, checkerArgs, { stdio: "ignore", shell: process.platform !== "win32" });
+  return result.status === 0;
 }
 
 function printHelp(): void {
