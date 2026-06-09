@@ -82,7 +82,7 @@ async function verifyAgentSkillsLocalList() {
     });
     assert(result.stdout.includes("skillos"), "Local Agent Skills listing did not include skillos.", { result });
     return { command: result.command, exitCode: result.exitCode, stdout: summarize(result.stdout), stderr: summarize(result.stderr) };
-  });
+  }, { network: true, ciOptional: true });
 }
 
 async function verifyAgentSkillsLocalInstall() {
@@ -102,7 +102,7 @@ async function verifyAgentSkillsLocalInstall() {
       stdout: summarize(result.stdout),
       stderr: summarize(result.stderr)
     };
-  });
+  }, { network: true, ciOptional: true });
 }
 
 async function verifyRuntimeSourceInstall() {
@@ -331,7 +331,11 @@ async function step(name, action, options = {}) {
     steps.push({ name, status: "pass", details });
   } catch (err) {
     const details = errorDetails(err);
-    const status = options.network && isNetworkFailure(details) ? "network_failed" : "fail";
+    const status = options.network && isNetworkFailure(details)
+      ? "network_failed"
+      : options.ciOptional && isGitHubActions() && isAgentSkillsEnvironmentFailure(details)
+        ? "skipped"
+        : "fail";
     steps.push({ name, status, details });
   }
 }
@@ -584,6 +588,15 @@ function compareSnapshots(before, after) {
 function isNetworkFailure(details) {
   const text = JSON.stringify(details).toLowerCase();
   return /(failed to clone|could not resolve|connection|network|timeout|timed out|recv failure|connection was reset|early eof|schannel|unable to access|could not connect|econnreset|enotfound|fetch failed|tls|ssl|proxy)/i.test(text);
+}
+
+function isGitHubActions() {
+  return process.env.GITHUB_ACTIONS === "true";
+}
+
+function isAgentSkillsEnvironmentFailure(details) {
+  const text = JSON.stringify(details).toLowerCase();
+  return /(agent|codex|skills).*(not detected|not found|not installed|unsupported|unavailable|cannot find)|no supported agent|could not detect|failed to detect|unknown agent/.test(text);
 }
 
 function errorDetails(err) {

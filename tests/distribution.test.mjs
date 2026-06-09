@@ -102,11 +102,11 @@ test("product positioning and multilingual docs are exposed", async () => {
   assert.match(market, /MCP Client Best Practices/);
 
   const languages = await readFile(join(repoRoot, "docs", "languages.md"), "utf8");
-  assert.match(languages, /简体中文/);
-  assert.match(languages, /日本語/);
-  assert.match(languages, /한국어/);
-  assert.match(languages, /Español/);
-  assert.match(languages, /Français/);
+  assert.match(languages, /i18n\/zh-CN\/README\.md/);
+  assert.match(languages, /i18n\/ja\/README\.md/);
+  assert.match(languages, /i18n\/ko\/README\.md/);
+  assert.match(languages, /i18n\/es\/README\.md/);
+  assert.match(languages, /i18n\/fr\/README\.md/);
 });
 
 test("preview publishing metadata is version-aligned", async () => {
