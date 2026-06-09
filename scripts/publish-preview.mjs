@@ -159,9 +159,9 @@ async function verifyCleanGitState() {
 async function publishGitHubReleaseTag() {
   if (results.some((item) => item.status === "fail")) return;
   try {
-    const localTag = spawnSync("git", ["rev-parse", "-q", "--verify", `refs/tags/${TAG}`], { cwd: repoRoot, encoding: "utf8" });
+    const localTag = spawnCommand("git", ["rev-parse", "-q", "--verify", `refs/tags/${TAG}`], { cwd: repoRoot, encoding: "utf8" });
     if (localTag.status !== 0) run("git", ["tag", TAG]);
-    const remoteTag = spawnSync("git", ["ls-remote", "--tags", "origin", TAG], { cwd: repoRoot, encoding: "utf8", timeout: 60000 });
+    const remoteTag = spawnCommand("git", ["ls-remote", "--tags", "origin", TAG], { cwd: repoRoot, encoding: "utf8", timeout: 60000 });
     if (remoteTag.status === 0 && remoteTag.stdout.trim()) {
       add("github-release-tag", "skipped", { reason: "already_exists", tag: TAG });
       return;
@@ -207,7 +207,7 @@ async function publishNpmPackages() {
 
   let allAvailable = true;
   for (const workspace of WORKSPACES) {
-    const existing = spawnSync(npmBin(), ["view", `${workspace}@${VERSION}`, "version"], {
+    const existing = spawnCommand(npmBin(), ["view", `${workspace}@${VERSION}`, "version"], {
       cwd: repoRoot,
       encoding: "utf8",
       timeout: 60000
@@ -274,7 +274,7 @@ async function publishClawHub() {
 }
 
 async function npmPackageVersionExists(packageName, version) {
-  const result = spawnSync(npmBin(), ["view", `${packageName}@${version}`, "version"], {
+  const result = spawnCommand(npmBin(), ["view", `${packageName}@${version}`, "version"], {
     cwd: repoRoot,
     encoding: "utf8",
     timeout: 60000
@@ -283,14 +283,14 @@ async function npmPackageVersionExists(packageName, version) {
 }
 
 function run(command, commandArgs, options = {}) {
-  const result = spawnSync(command, commandArgs, {
+  const result = spawnCommand(command, commandArgs, {
     cwd: options.cwd ?? repoRoot,
     encoding: "utf8",
     timeout: options.timeoutMs ?? 120000,
     maxBuffer: 1024 * 1024 * 20
   });
   const payload = {
-    command: [command, ...commandArgs].join(" "),
+    command: formatCommand(command, commandArgs),
     cwd: options.cwd ?? repoRoot,
     exitCode: result.status,
     signal: result.signal,
@@ -308,6 +308,29 @@ function run(command, commandArgs, options = {}) {
     throw err;
   }
   return payload;
+}
+
+function spawnCommand(command, commandArgs, options = {}) {
+  const invocation = windowsInvocation(command, commandArgs);
+  return spawnSync(invocation.command, invocation.args, {
+    cwd: options.cwd ?? repoRoot,
+    encoding: options.encoding ?? "utf8",
+    timeout: options.timeout ?? options.timeoutMs ?? 120000,
+    maxBuffer: options.maxBuffer ?? 1024 * 1024 * 20,
+    shell: false,
+    windowsVerbatimArguments: invocation.windowsVerbatimArguments ?? false
+  });
+}
+
+function windowsInvocation(command, commandArgs) {
+  if (process.platform !== "win32") return { command, args: commandArgs };
+  if (!/\.cmd$/i.test(command)) return { command, args: commandArgs };
+  const line = ["call", command, ...commandArgs].map(quoteForCmd).join(" ");
+  return {
+    command: process.env.ComSpec ?? "cmd.exe",
+    args: ["/d", "/c", line],
+    windowsVerbatimArguments: true
+  };
 }
 
 function commandExists(command) {
@@ -354,6 +377,22 @@ function summarize(text) {
 
 function stripAnsi(text) {
   return String(text).replace(/\x1B\[[0-?]*[ -/]*[@-~]/g, "");
+}
+
+function formatCommand(command, args) {
+  return [command, ...args].map(quoteForDisplay).join(" ");
+}
+
+function quoteForDisplay(value) {
+  const text = String(value);
+  if (/^[A-Za-z0-9_./:=@,+-]+$/.test(text)) return text;
+  return `"${text.replace(/"/g, '\\"')}"`;
+}
+
+function quoteForCmd(value) {
+  const text = String(value);
+  if (/^[A-Za-z0-9_./:=@,+-]+$/.test(text)) return text;
+  return `"${text.replace(/"/g, '""')}"`;
 }
 
 function countStatuses(values) {
