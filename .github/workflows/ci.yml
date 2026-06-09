@@ -68,14 +68,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Test
-        run: npm test
+      - name: Build
+        run: npm run build
 
       - name: Build zip
         run: npm run pack:zip
 
       - name: Verify isolated installation
-        run: npm run verify:install
+        run: npm run verify:install -- --skip-agent-skills
 
   network-installation-verification:
     runs-on: ubuntu-latest

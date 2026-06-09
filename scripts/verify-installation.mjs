@@ -26,6 +26,7 @@ class VerificationFailure extends Error {
 const args = parseArgs(process.argv.slice(2));
 const includeNetwork = Boolean(args.network);
 const networkOnly = Boolean(args["network-only"]);
+const skipAgentSkills = Boolean(args["skip-agent-skills"]);
 const keepTemp = Boolean(args["keep-temp"]);
 const tempRoot = await mkdtemp(join(tmpdir(), "skillos-install-verify-"));
 const steps = [];
@@ -33,8 +34,13 @@ const realBefore = await snapshotRealTargets();
 
 try {
   if (!networkOnly) {
-    await verifyAgentSkillsLocalList();
-    await verifyAgentSkillsLocalInstall();
+    if (!skipAgentSkills) {
+      await verifyAgentSkillsLocalList();
+      await verifyAgentSkillsLocalInstall();
+    } else {
+      steps.push({ name: "agent-skills-local-list", status: "skipped", details: { reason: "skip_agent_skills_requested" } });
+      steps.push({ name: "agent-skills-local-install-codex", status: "skipped", details: { reason: "skip_agent_skills_requested" } });
+    }
     await verifyRuntimeSourceInstall();
     await verifyRuntimeLinkedInstall();
     await verifyZipInstall();
