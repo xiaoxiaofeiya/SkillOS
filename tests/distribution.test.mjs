@@ -59,6 +59,43 @@ test("installation verification scripts are exposed", async () => {
   assert.match(powershellBootstrap, /SKILLOS_INSTALL_DIR/);
 });
 
+test("product positioning and multilingual docs are exposed", async () => {
+  const readme = await readFile(join(repoRoot, "README.md"), "utf8");
+  assert.match(readme, /mission control for every skill/);
+  assert.match(readme, /docs\/market-context\.md/);
+  assert.match(readme, /docs\/i18n\/zh-CN\/README\.md/);
+  assert.match(readme, /docs\/i18n\/ja\/README\.md/);
+  assert.match(readme, /docs\/i18n\/ko\/README\.md/);
+  assert.match(readme, /docs\/i18n\/es\/README\.md/);
+  assert.match(readme, /docs\/i18n\/fr\/README\.md/);
+
+  const requiredDocs = [
+    "docs/product-overview.md",
+    "docs/market-context.md",
+    "docs/languages.md",
+    "docs/i18n/zh-CN/README.md",
+    "docs/i18n/ja/README.md",
+    "docs/i18n/ko/README.md",
+    "docs/i18n/es/README.md",
+    "docs/i18n/fr/README.md"
+  ];
+  for (const path of requiredDocs) {
+    assert.equal(existsSync(join(repoRoot, path)), true, `${path} should exist`);
+  }
+
+  const market = await readFile(join(repoRoot, "docs", "market-context.md"), "utf8");
+  assert.match(market, /OpenAI Codex plugins and skills/);
+  assert.match(market, /Claude Code Skills/);
+  assert.match(market, /MCP Client Best Practices/);
+
+  const languages = await readFile(join(repoRoot, "docs", "languages.md"), "utf8");
+  assert.match(languages, /简体中文/);
+  assert.match(languages, /日本語/);
+  assert.match(languages, /한국어/);
+  assert.match(languages, /Español/);
+  assert.match(languages, /Français/);
+});
+
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

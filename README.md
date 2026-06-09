@@ -1,60 +1,57 @@
 # SkillOS
 
-SkillOS is a local-first skill orchestration layer for coding agents.
+**Give your coding agent a mission control for every skill you install.**
 
-It discovers installed skills, turns them into capability cards, recommends staged skill chains, exposes an MCP server, records redacted decisions locally, accepts feedback, runs routing evals, and generates presets for Codex, Claude Code, Cursor, Windsurf, OpenHands, OpenClaw, and OpenClaw-like clients.
+Languages: [English](README.md) | [简体中文](docs/i18n/zh-CN/README.md) | [日本語](docs/i18n/ja/README.md) | [한국어](docs/i18n/ko/README.md) | [Español](docs/i18n/es/README.md) | [Français](docs/i18n/fr/README.md)
 
-## What SkillOS Is For
+Your coding agent can design UI, test in a browser, deploy apps, review security, read docs, build CLIs, run notebooks, and call MCP tools. The problem is simple: the more powers you install, the easier it is for the agent to miss the right one.
 
-Modern coding agents can use skills, MCP servers, plugins, hooks, rules, workflows, and local tools. The hard part is not only installing them. The hard part is helping the agent notice the right capability at the right phase of a messy real task, explain why it chose it, and avoid loading every tool into context.
+SkillOS fixes that. It helps the agent notice what is installed, understand what each capability is for, choose the right chain of skills, explain the choice, and keep risky actions under your safety rules.
 
-SkillOS is built for that gap. It gives agents a local operating layer for skills:
+You do not need to remember whether the right tool is called `playwright`, `security-threat-model`, `vercel-deploy`, `jupyter-notebook`, or something else. Say what you want. SkillOS helps the agent translate that request into a real workflow.
 
-- It inventories what is installed on this machine.
-- It converts skills and tools into structured capability cards.
-- It routes vague user requests such as "make this app usable", "is this safe", or "put it online" into likely work domains.
-- It plans multi-step skill chains instead of choosing one skill at a time.
-- It re-checks skill needs across intake, repo inspection, implementation, verification, deployment, security review, and final response.
-- It records local, redacted decision traces so users can inspect and correct routing behavior.
-- It generates client-specific presets for the agent environments people actually use.
+## The Promise
 
-The goal is to make installed skills feel less like a passive menu and more like an adaptive local workflow system.
+SkillOS turns a folder full of skills into an agent that feels prepared.
 
-## Typical Use Cases
+- **For beginners**: ask in plain language. The agent should figure out the skill names.
+- **For builders**: connect skills, MCP tools, rules, plugins, hooks, and client presets without hardcoding every case.
+- **For teams**: keep decisions local, explainable, testable, and safer by default.
+- **For new skills**: install them once, then let inventory and routing discover them next time.
 
-Use SkillOS when you want an agent to decide which specialized capabilities to use without requiring the user to know their names.
+## What This Feels Like
 
-| User says | SkillOS should help the agent do |
-| --- | --- |
-| "I do not know UI design. Make this page professional." | Route to UI/design, implementation, browser testing, screenshot QA, and possibly security checks. |
-| "Deploy this app, but do not break anything." | Inspect repo signals, choose deployment capabilities if installed, recommend smoke tests, and flag credential or public-exposure risk. |
-| "Is this login/upload/API safe?" | Route to security review or threat modeling, explain risk, and keep high-risk actions behind the configured safety profile. |
-| "Make a CLI for this repeated task." | Route to CLI creation, command contract design, local smoke tests, and a companion skill workflow. |
-| "I installed new skills. Use whatever makes sense." | Re-inventory local capabilities and update recommendations without changing SkillOS code. |
-
-## How It Works
+You say:
 
 ```text
-User task
-  -> local inventory
-  -> capability cards
-  -> repo and phase signals
-  -> safety gate
-  -> ranked candidates
-  -> staged skill chain
-  -> decision log and feedback memory
+I do not know UI design. Make this dashboard look professional and check it.
 ```
 
-SkillOS does not blindly load all skills. It selects the smallest chain that appears useful for the current task and phase, then explains selected and skipped candidates.
+SkillOS helps the agent think:
 
-## What SkillOS Is Not
+```text
+This is not one task.
+It needs UI judgment, implementation, browser verification,
+screenshot QA, and maybe a security check before delivery.
+```
 
-- It is not only an installer. The installer is just how the agent-facing skill and local runtime get onto the machine.
-- It is not a cloud telemetry service. Local routing and local logs are the default.
-- It is not a replacement for Codex, Claude Code, Cursor, Windsurf, OpenHands, or OpenClaw. It is a shared orchestration layer that can generate presets for them.
-- It does not make risky actions invisible. Deployment, credential use, external private-data sends, auth/security changes, and destructive operations are handled by safety profiles.
+Then it recommends a staged chain instead of guessing one random tool.
 
-For a fuller product explanation, read [docs/product-overview.md](docs/product-overview.md).
+Another example:
+
+```text
+Deploy this app, but do not break anything.
+```
+
+SkillOS can inspect the repo, look for installed deployment skills, add verification steps, flag credential risk, and explain what it selected or skipped.
+
+## Why Now
+
+The agent market is moving fast. Codex, Claude Code, Cursor, Windsurf, OpenHands, OpenClaw, MCP, and the Agent Skills ecosystem are all adding ways to package specialized capabilities. That is powerful, but it creates a new problem: someone has to decide which capability to use, when to use it, and how to combine it with the next step.
+
+SkillOS is built for that missing layer.
+
+Read the market notes in [docs/market-context.md](docs/market-context.md), then read the full product explanation in [docs/product-overview.md](docs/product-overview.md).
 
 ## Install
 

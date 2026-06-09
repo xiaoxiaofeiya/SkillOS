@@ -1,167 +1,183 @@
 # Product Overview
 
-SkillOS is a local-first orchestration layer for coding-agent skills, tools, plugins, rules, MCP servers, and client workflows.
+SkillOS is the control center for coding-agent skills.
 
-It exists because installing capabilities is not enough. In real projects, users often describe work casually or incompletely. They might say "make this UI better", "check if this is safe", "deploy it", "turn this into a tool", or "use whatever skills are useful". A normal skill list still expects the user or agent to remember which capability exists, when it applies, how risky it is, and what should happen after it runs.
+It is built for one very practical moment: you ask an agent for help, but you do not know which skill, tool, plugin, MCP server, rule, or workflow should be used. You should not have to know. The agent should be able to look at the job, look at the machine, understand what is installed, and choose a smart path.
 
-SkillOS turns that passive list into a local routing and workflow layer.
+That is the product.
 
-## The Problem
+## The Big Idea
 
-Coding agents are gaining many specialized extensions:
+AI coding agents are becoming more powerful every month. They can write code, edit files, run commands, test a web page, search docs, generate images, deploy apps, threat-model systems, operate notebooks, and call external tools.
 
-- Skills for UI work, browser testing, deployment, security, notebooks, documents, CLI creation, platform docs, and more.
-- MCP servers that expose tools and external systems.
-- Rules, hooks, workflows, subagents, and plugins in different clients.
-- Client-specific configuration formats across Codex, Claude Code, Cursor, Windsurf, OpenHands, OpenClaw, and similar runtimes.
+But power alone is not enough.
 
-Without a shared orchestration layer, several things go wrong:
+If an agent has fifty skills installed and still waits for you to say the perfect skill name, the system is still too hard. If it loads everything into context, it becomes noisy and expensive. If it deploys, sends data, or touches credentials without a clear safety gate, it becomes dangerous.
 
-- Users have to know skill names before the agent can use them well.
-- Agents may ignore installed skills during implementation or verification.
-- Broad prompts can trigger too many tools or the wrong tools.
-- A skill may be useful only in a later phase, but the agent only checks once at intake.
-- Different users have different installed skills, so hardcoded prompt rules age quickly.
-- There is often no clear record of why a tool was selected or skipped.
-- Installing a skill does not automatically explain how it should be combined with other capabilities.
-
-SkillOS addresses these problems locally.
-
-## The Product Idea
-
-SkillOS acts like a skill operating layer for coding agents.
-
-It provides:
-
-- **Inventory**: discover installed local skills, generated presets, built-in tools, and client adapter capabilities.
-- **Capability cards**: normalize each capability into domains, triggers, inputs, outputs, side effects, credential requirements, risk, verification strength, and client compatibility.
-- **Routing**: score candidates using task wording, Chinese and English casual prompts, repo signals, phase, safety profile, routing memory, and negative context.
-- **Skill chains**: recommend staged workflows instead of one isolated skill.
-- **Safety gates**: evaluate write-file, run-command, external-network, deploy, credential, private-data-send, and destructive actions against a configured safety profile.
-- **Decision traces**: record local redacted decisions so users can inspect what happened.
-- **Feedback memory**: let users correct "prefer this skill" or "avoid that skill" and feed that into future scoring.
-- **Client presets**: map one SkillOS workflow into Codex, Claude Code, Cursor, Windsurf, OpenHands, OpenClaw, and OpenClaw-like environments.
-- **Evals**: measure routing quality with realistic prompts instead of guessing whether the product feels smart.
-
-## Example Workflows
-
-### UI Work
-
-User prompt:
+SkillOS gives the agent a better way:
 
 ```text
-I do not know UI design. Make this dashboard look professional and check it.
+Understand the request
+  -> inspect installed capabilities
+  -> read repo signals
+  -> choose a staged skill chain
+  -> explain the decision
+  -> keep risky steps under the safety profile
+  -> learn from feedback
 ```
 
-SkillOS can recommend a chain like:
+## In Plain Language
+
+Think of every skill as a specialist.
+
+One specialist is good at UI. Another is good at browser testing. Another knows deployment. Another reviews security. Another builds CLIs. Another works with notebooks or documents.
+
+SkillOS is the coordinator that asks:
+
+- What is the user really trying to do?
+- Which specialists are available on this machine?
+- Which ones are useful now?
+- Which ones should wait until later?
+- Which ones are risky?
+- What proof should we collect before saying the job is done?
+
+That is why SkillOS is not just an installer. It is the layer that helps installed skills become useful at the right time.
+
+## Example: A Non-Technical User
+
+User:
 
 ```text
-UI/design planning
-  -> implementation guidance
-  -> browser verification
-  -> screenshot QA
-  -> final review
+I do not know design. Make this page look like a real product.
 ```
 
-If the user has UI mockup, Playwright, screenshot, or design-related skills installed, SkillOS can route toward them. If not, it can report the gap and suggest what to install.
+A weak agent might change colors and stop.
 
-### Security-Sensitive Work
-
-User prompt:
+SkillOS should push the agent toward a better chain:
 
 ```text
-This upload endpoint uses auth and stores files. Is it safe?
+Understand the product
+  -> plan the layout
+  -> implement the interface
+  -> open it in a browser
+  -> capture screenshots
+  -> fix overflow, spacing, and broken states
+  -> summarize what changed
 ```
 
-SkillOS should identify security and threat-model signals, treat credential and external-data paths as higher risk, and keep recommendations explainable. In `approve` mode, risky follow-up actions should require confirmation or remain a plan.
+The user does not need to say "use Playwright" or "run screenshot QA". SkillOS helps the agent infer the workflow.
 
-### Deployment Work
+## Example: A Developer
 
-User prompt:
+User:
 
 ```text
-Put this online and make sure it still works.
+Deploy this app, but make sure it is safe.
 ```
 
-SkillOS can inspect repo signals, detect whether deployment skills are installed, recommend a deployment path only when relevant, and pair it with verification and safety checks.
-
-### Tooling Work
-
-User prompt:
+SkillOS can route this as more than deployment:
 
 ```text
-I keep repeating this terminal workflow. Turn it into a reusable command.
+Inspect repo
+  -> detect deployment options
+  -> check credentials and environment variables
+  -> recommend the deploy skill if installed
+  -> require approval for risky steps
+  -> run smoke checks
+  -> explain what happened
 ```
 
-SkillOS can route to CLI creation, help define command contracts, recommend smoke tests from outside the source folder, and preserve a future skill workflow for agents.
+The useful part is not only "deploy". The useful part is deploying with context, checks, and visible decisions.
 
-### New Skill Installed
+## Example: A Power User
 
-User action:
+User:
 
 ```text
-I installed a new skill.
+I installed new skills. Use whatever makes sense from now on.
 ```
 
-SkillOS should not need source-code changes. The next inventory pass can discover the new skill, derive or validate its capability card, and let routing adapt to the user's actual local environment.
+SkillOS does not need a source-code update for each new skill. It can inventory local skills, derive capability cards, validate the metadata, and let future recommendations change based on what is actually installed.
+
+That means two users can ask the same question and get different skill chains because their machines have different capabilities. That is the point.
+
+## What SkillOS Provides
+
+- **Inventory**: discover installed skills, tools, presets, and client adapter capabilities.
+- **Capability cards**: turn messy skill descriptions into structured routing data.
+- **Routing**: match plain-language tasks to likely domains and phases.
+- **Skill chains**: recommend multi-step workflows instead of one isolated skill.
+- **Safety gates**: evaluate write, command, network, deploy, credential, private-data, and destructive actions.
+- **Decision logs**: store redacted local traces so decisions can be inspected.
+- **Feedback memory**: let users say "prefer this" or "avoid that" and improve future routing.
+- **Client adapters**: generate presets for Codex, Claude Code, Cursor, Windsurf, OpenHands, OpenClaw, and OpenClaw-like clients.
+- **MCP server**: expose stable tools for inventory, search, recommendation, context rendering, feedback, evals, and setup checks.
+- **Evals**: measure whether routing is getting better with realistic prompts.
 
 ## Why Local-First Matters
 
-SkillOS is designed to run without uploading private project data by default.
+SkillOS is meant to run on the user's machine first.
 
 Local-first means:
 
-- Inventory and routing work without external model calls.
-- Decision logs live under `.skillos/`.
+- Routing works without external model calls.
+- Decision logs stay under `.skillos/`.
 - Logs are redacted before writing.
 - Optional model enhancement is off by default.
-- Users can choose `suggest`, `approve`, or `auto` safety modes.
-- Release bundles exclude `.skillos/`, logs, credentials, `node_modules`, TypeScript build-info files, and local path metadata.
+- Release packages exclude local config, logs, credentials, `node_modules`, build metadata, and private paths.
+- Users can choose `suggest`, `approve`, or `auto` safety profiles.
 
-Optional model enhancement can be enabled later, but it is not required for the core product.
+This matters because agent tools can touch real files, real credentials, and real production systems. A skill orchestration layer should be useful, but it should also be visible and governable.
 
-## How SkillOS Differs From A Normal Skill
+## What Makes It Different
 
-A normal skill usually describes one workflow and waits for an agent to load it.
+A normal skill says:
 
-SkillOS is different because it focuses on orchestration:
+```text
+When I am loaded, here is how to do one job.
+```
 
-- It discovers many capabilities.
-- It compares candidates.
-- It explains selected and skipped skills.
-- It plans chains across phases.
-- It generates client-specific config.
-- It learns from local feedback.
-- It detects missing capabilities.
-- It can be called through CLI or MCP.
+SkillOS asks:
 
-It is still not a replacement for the underlying skills. It makes them easier to discover, combine, and verify.
+```text
+Which job is this?
+Which skills exist?
+Which skills should be loaded?
+Which order should they run in?
+What should be skipped?
+What is risky?
+How do we verify the result?
+How do we learn from user correction?
+```
+
+That is the difference between a passive skill library and an active skill operating layer.
 
 ## Who It Is For
 
-SkillOS is useful for:
+SkillOS is for:
 
-- Non-technical users who do not know which skill name to ask for.
-- Developers who install many agent skills and want better routing.
-- Teams that support multiple coding-agent clients.
-- Builders of OpenClaw-like runtimes who need a capability probing protocol.
-- Skill authors who want their skills to be discoverable through structured capability metadata.
-- Agent developers who need stable JSON tools, evals, and decision traces.
+- People who use agents but do not know skill names.
+- Developers who install many skills and want the agent to use them at the right time.
+- Teams that need one routing layer across multiple agent clients.
+- Skill authors who want their work to be discoverable by capability, not only by name.
+- OpenClaw and OpenClaw-like runtime builders who need probing, manifests, and adapter support.
+- Agent developers who need stable JSON, MCP tools, decision traces, and evals.
 
 ## What Success Looks Like
 
 SkillOS is working when:
 
-- A vague task produces a reasonable chain rather than a random single skill.
-- Different users get different recommendations based on what is installed locally.
-- New skills are discovered without editing SkillOS source.
-- The agent can explain why it selected and skipped candidates.
-- Risky actions pass through a visible safety profile.
-- Installers and zip packages can be tested in isolated temporary environments.
-- Routing quality can be measured with evals and improved with feedback.
+- Vague prompts produce useful staged plans.
+- New skills become discoverable without editing SkillOS code.
+- Different machines produce different recommendations based on installed capabilities.
+- The agent explains why it selected and skipped skills.
+- Risky work is visible and controlled by a safety profile.
+- Users can correct routing and see future behavior improve.
+- Install paths are verified in isolated temporary environments before distribution.
 
 ## What To Read Next
 
+- [Market Context](market-context.md): why this product exists now.
 - [Installation](installation.md): install the agent-facing skill and local runtime.
 - [Distribution Guide](distribution.md): understand public preview install paths and release packaging.
 - [Client Adapters](client-adapters.md): see how SkillOS maps into different coding-agent clients.
