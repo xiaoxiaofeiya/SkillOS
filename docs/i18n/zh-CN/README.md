@@ -92,3 +92,12 @@ skillos.cmd doctor
 - [产品概览](../../product-overview.md)
 - [安装文档](../../installation.md)
 - [市场背景](../../market-context.md)
+
+## 在哪里安装
+
+- Agent Skills / skills.sh：`npx skills add xiaoxiaofeiya/SkillOS -g`
+- Claude Code：`/plugin marketplace add xiaoxiaofeiya/SkillOS`，然后 `/plugin install skillos`
+- GitHub Release：下载 `v0.1.0-preview.1` 的 `skillos.zip`
+- npm preview：发布后使用 `npm install -g @skillos/cli@preview`
+- MCP server：发布后使用 `npx @skillos/mcp-server@preview`
+- OpenClaw / ClawHub：查看 `docs/publishing-platforms.md`

@@ -80,3 +80,12 @@ skillos explain --last
 ```
 
 詳しくは [Product Overview](../../product-overview.md) と [Installation](../../installation.md) を読んでください。
+
+## インストール先
+
+- Agent Skills / skills.sh: `npx skills add xiaoxiaofeiya/SkillOS -g`
+- Claude Code: `/plugin marketplace add xiaoxiaofeiya/SkillOS`, then `/plugin install skillos`
+- GitHub Release: download `skillos.zip` from `v0.1.0-preview.1`
+- npm preview: `npm install -g @skillos/cli@preview` after npm publish
+- MCP server: `npx @skillos/mcp-server@preview` after npm publish
+- OpenClaw / ClawHub: see `docs/publishing-platforms.md`

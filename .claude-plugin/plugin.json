@@ -1,6 +1,6 @@
 {
   "name": "skillos",
-  "version": "0.1.0",
+  "version": "0.1.0-preview.1",
   "description": "Local-first skill orchestration for coding agents. Discover installed skills, recommend staged skill chains, expose MCP tools, generate client presets, and record explainable decisions.",
   "author": {
     "name": "xiaoxiaofeiya",
@@ -9,5 +9,15 @@
   "homepage": "https://github.com/xiaoxiaofeiya/SkillOS",
   "repository": "https://github.com/xiaoxiaofeiya/SkillOS",
   "license": "MIT",
-  "keywords": ["skills", "agents", "mcp", "codex", "claude-code", "cursor", "windsurf", "openhands", "openclaw"]
+  "keywords": [
+    "skills",
+    "agents",
+    "mcp",
+    "codex",
+    "claude-code",
+    "cursor",
+    "windsurf",
+    "openhands",
+    "openclaw"
+  ]
 }

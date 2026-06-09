@@ -49,6 +49,9 @@ test("installation verification scripts are exposed", async () => {
   const rootPackage = JSON.parse(await readFile(join(repoRoot, "package.json"), "utf8"));
   assert.equal(rootPackage.scripts["verify:install"], "node scripts/verify-installation.mjs");
   assert.equal(rootPackage.scripts["verify:install:network"], "node scripts/verify-installation.mjs --network --network-only");
+  assert.equal(rootPackage.scripts["verify:publish-readiness"], "node scripts/verify-publish-readiness.mjs");
+  assert.equal(rootPackage.scripts["publish:preview:dry-run"], "node scripts/publish-preview.mjs --dry-run");
+  assert.equal(rootPackage.scripts["publish:preview:live"], "node scripts/publish-preview.mjs --confirm-live");
   assert.match(rootPackage.scripts["release:local"], /verify:install/);
 
   const verifier = await readFile(join(repoRoot, "scripts", "verify-installation.mjs"), "utf8");
@@ -57,12 +60,18 @@ test("installation verification scripts are exposed", async () => {
 
   const powershellBootstrap = await readFile(join(repoRoot, "scripts", "install-from-github.ps1"), "utf8");
   assert.match(powershellBootstrap, /SKILLOS_INSTALL_DIR/);
+
+  assert.equal(existsSync(join(repoRoot, "scripts", "verify-publish-readiness.mjs")), true);
+  assert.equal(existsSync(join(repoRoot, "scripts", "publish-preview.mjs")), true);
 });
 
 test("product positioning and multilingual docs are exposed", async () => {
   const readme = await readFile(join(repoRoot, "README.md"), "utf8");
   assert.match(readme, /mission control for every skill/);
+  assert.match(readme, /\[!\[skills\.sh\]\(https:\/\/skills\.sh\/b\/xiaoxiaofeiya\/SkillOS\)\]\(https:\/\/skills\.sh\/xiaoxiaofeiya\/SkillOS\)/);
   assert.match(readme, /docs\/market-context\.md/);
+  assert.match(readme, /docs\/publishing-platforms\.md/);
+  assert.match(readme, /v0\.1\.0-preview\.1/);
   assert.match(readme, /docs\/i18n\/zh-CN\/README\.md/);
   assert.match(readme, /docs\/i18n\/ja\/README\.md/);
   assert.match(readme, /docs\/i18n\/ko\/README\.md/);
@@ -73,6 +82,10 @@ test("product positioning and multilingual docs are exposed", async () => {
     "docs/product-overview.md",
     "docs/market-context.md",
     "docs/languages.md",
+    "docs/publishing-platforms.md",
+    "docs/launch-checklist.md",
+    "docs/mcp-distribution.md",
+    "docs/community-launch-kit.md",
     "docs/i18n/zh-CN/README.md",
     "docs/i18n/ja/README.md",
     "docs/i18n/ko/README.md",
@@ -94,6 +107,43 @@ test("product positioning and multilingual docs are exposed", async () => {
   assert.match(languages, /한국어/);
   assert.match(languages, /Español/);
   assert.match(languages, /Français/);
+});
+
+test("preview publishing metadata is version-aligned", async () => {
+  const version = "0.1.0-preview.1";
+  const packageFiles = [
+    "package.json",
+    "packages/core/package.json",
+    "packages/adapters/package.json",
+    "packages/cli/package.json",
+    "packages/mcp-server/package.json",
+    ".claude-plugin/plugin.json",
+    ".codex-plugin/plugin.json",
+    "gemini-extension.json",
+    "presets/openclaw/openclaw-plugin.json"
+  ];
+
+  for (const file of packageFiles) {
+    const json = JSON.parse(await readFile(join(repoRoot, file), "utf8"));
+    assert.equal(json.version, version, `${file} version should match preview version`);
+    for (const key of ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"]) {
+      for (const [name, dependencyVersion] of Object.entries(json[key] ?? {})) {
+        if (name.startsWith("@skillos/")) assert.equal(dependencyVersion, version, `${file} dependency ${name} should match preview version`);
+      }
+    }
+  }
+
+  const claudeMarketplace = JSON.parse(await readFile(join(repoRoot, ".claude-plugin", "marketplace.json"), "utf8"));
+  assert.equal(claudeMarketplace.plugins[0].version, version);
+  assert.equal(claudeMarketplace.plugins[0].source, "./");
+
+  const mcpPackage = JSON.parse(await readFile(join(repoRoot, "packages", "mcp-server", "package.json"), "utf8"));
+  const server = JSON.parse(await readFile(join(repoRoot, "server.json"), "utf8"));
+  assert.equal(mcpPackage.mcpName, "io.github.xiaoxiaofeiya/skillos");
+  assert.equal(server.name, mcpPackage.mcpName);
+  assert.equal(server.version, version);
+  assert.equal(server.packages[0].identifier, "@skillos/mcp-server");
+  assert.equal(server.packages[0].transport.type, "stdio");
 });
 
 function escapeRegExp(value) {

@@ -1,5 +1,7 @@
 # SkillOS
 
+[![skills.sh](https://skills.sh/b/xiaoxiaofeiya/SkillOS)](https://skills.sh/xiaoxiaofeiya/SkillOS)
+
 **Give your coding agent a mission control for every skill you install.**
 
 Languages: [English](README.md) | [简体中文](docs/i18n/zh-CN/README.md) | [日本語](docs/i18n/ja/README.md) | [한국어](docs/i18n/ko/README.md) | [Español](docs/i18n/es/README.md) | [Français](docs/i18n/fr/README.md)
@@ -69,9 +71,26 @@ For the best experience, install both.
 | Windows runtime | Use the PowerShell command below | Run the same command again |
 | macOS/Linux runtime | Use the shell command below | Run the same command again |
 | GitHub source install | Clone the repo, then run `scripts/install.ps1` or `scripts/install.sh` | `git pull --ff-only`, then rerun the installer |
-| Zip preview package | Download `skillos.zip`, extract, then run `npm run install:local` | Download the latest zip |
+| GitHub Release zip | Download `skillos.zip` from [v0.1.0-preview.1](https://github.com/xiaoxiaofeiya/SkillOS/releases/tag/v0.1.0-preview.1), extract, then run `npm run install:local` | Download the latest release zip |
+| npm preview packages | `npm install -g @skillos/cli@preview` after npm publish | `npm update -g @skillos/cli` |
+| MCP server | `npx @skillos/mcp-server@preview` after npm publish | Use the latest preview tag |
+| OpenClaw / ClawHub | Use the OpenClaw publishing notes in `docs/publishing-platforms.md` | Use the latest published preview |
 
 More details: [docs/distribution.md](docs/distribution.md) and [docs/installation.md](docs/installation.md).
+
+## Developer Platform Exposure
+
+SkillOS is prepared for multiple developer discovery channels, not just GitHub:
+
+- Agent Skills / skills.sh / GitHub Copilot skills.
+- Claude Code plugin marketplace.
+- GitHub Release zip downloads.
+- npm preview packages for `@skillos/core`, `@skillos/adapters`, `@skillos/mcp-server`, and `@skillos/cli`.
+- MCP Registry, Glama, Smithery, and PulseMCP.
+- OpenClaw / ClawHub.
+- Awesome lists and community launch channels.
+
+Publishing details: [docs/publishing-platforms.md](docs/publishing-platforms.md), [docs/launch-checklist.md](docs/launch-checklist.md), [docs/mcp-distribution.md](docs/mcp-distribution.md), and [docs/community-launch-kit.md](docs/community-launch-kit.md).
 
 ## Quick Start
 

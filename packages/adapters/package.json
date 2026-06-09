@@ -1,6 +1,6 @@
 {
   "name": "@skillos/adapters",
-  "version": "0.1.0",
+  "version": "0.1.0-preview.1",
   "description": "Client adapters and presets for Codex, Claude Code, Cursor, Windsurf, OpenHands, OpenClaw, and OpenClaw-like runtimes.",
   "license": "MIT",
   "repository": {
@@ -18,7 +18,7 @@
     }
   },
   "dependencies": {
-    "@skillos/core": "0.1.0"
+    "@skillos/core": "0.1.0-preview.1"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json"

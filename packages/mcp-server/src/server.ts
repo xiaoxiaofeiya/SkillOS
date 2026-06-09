@@ -16,7 +16,7 @@ export async function handleMcpRequest(request: JsonRpcRequest): Promise<Record<
       return ok(request.id, {
         protocolVersion: "2024-11-05",
         capabilities: { tools: {} },
-        serverInfo: { name: "skillos", version: "0.1.0" }
+        serverInfo: { name: "skillos", version: "0.1.0-preview.1" }
       });
     }
     if (request.method === "tools/list") {

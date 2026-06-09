@@ -1,7 +1,7 @@
 {
   "name": "skillos",
   "displayName": "SkillOS",
-  "version": "0.1.0",
+  "version": "0.1.0-preview.1",
   "description": "Progressive skill discovery and orchestration for OpenClaw and OpenClaw-like clients.",
   "capabilities": [
     "skills",

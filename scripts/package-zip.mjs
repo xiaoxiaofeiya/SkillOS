@@ -26,6 +26,7 @@ const includeRoots = [
   "scripts",
   "tests",
   "gemini-extension.json",
+  "server.json",
   "package.json",
   "package-lock.json",
   "tsconfig.base.json",

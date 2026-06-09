@@ -1,6 +1,6 @@
 {
   "name": "@skillos/core",
-  "version": "0.1.0",
+  "version": "0.1.0-preview.1",
   "description": "Core routing, capability cards, safety profiles, decision logs, and evals for SkillOS.",
   "license": "MIT",
   "repository": {

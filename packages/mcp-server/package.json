@@ -1,6 +1,6 @@
 {
   "name": "@skillos/mcp-server",
-  "version": "0.1.0",
+  "version": "0.1.0-preview.1",
   "description": "JSON-RPC stdio MCP server exposing SkillOS progressive skill discovery and routing tools.",
   "license": "MIT",
   "repository": {
@@ -21,8 +21,8 @@
     }
   },
   "dependencies": {
-    "@skillos/core": "0.1.0",
-    "@skillos/adapters": "0.1.0"
+    "@skillos/core": "0.1.0-preview.1",
+    "@skillos/adapters": "0.1.0-preview.1"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json"
@@ -44,5 +44,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "mcpName": "io.github.xiaoxiaofeiya/skillos"
 }

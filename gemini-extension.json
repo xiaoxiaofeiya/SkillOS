@@ -1,6 +1,6 @@
 {
   "name": "skillos",
-  "version": "0.1.0",
+  "version": "0.1.0-preview.1",
   "description": "Local-first skill orchestration for coding agents. Use SkillOS to discover local skills, recommend skill chains, expose MCP tools, and generate client presets.",
   "settings": [
     {

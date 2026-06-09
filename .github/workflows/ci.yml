@@ -35,6 +35,9 @@ jobs:
       - name: npm pack dry run
         run: npm run pack:npm
 
+      - name: Verify publish readiness
+        run: npm run verify:publish-readiness
+
       - name: Upload zip artifact
         uses: actions/upload-artifact@v4
         with:

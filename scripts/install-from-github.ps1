@@ -14,6 +14,19 @@ param(
 $ErrorActionPreference = "Stop"
 $Repo = "https://github.com/xiaoxiaofeiya/SkillOS.git"
 
+function Invoke-CheckedNative {
+  param(
+    [string]$FilePath,
+    [string[]]$Arguments,
+    [string]$FailureMessage
+  )
+
+  & $FilePath @Arguments
+  if ($LASTEXITCODE -ne 0) {
+    throw "$FailureMessage (exit code $LASTEXITCODE)"
+  }
+}
+
 if (-not $InstallDir) {
   if ($env:SKILLOS_INSTALL_DIR) {
     $InstallDir = $env:SKILLOS_INSTALL_DIR
@@ -27,11 +40,14 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
 }
 
 if (-not (Test-Path $InstallDir)) {
-  git clone $Repo $InstallDir
+  Invoke-CheckedNative "git" @("clone", $Repo, $InstallDir) "Failed to clone SkillOS from GitHub"
 } elseif (Test-Path (Join-Path $InstallDir ".git")) {
   Push-Location $InstallDir
-  git pull --ff-only
-  Pop-Location
+  try {
+    Invoke-CheckedNative "git" @("pull", "--ff-only") "Failed to update SkillOS from GitHub"
+  } finally {
+    Pop-Location
+  }
 } else {
   throw "InstallDir exists but is not a git repository: $InstallDir"
 }
@@ -41,4 +57,4 @@ $ArgsList = @("-ExecutionPolicy", "Bypass", "-File", $InstallScript, "-Safety", 
 if ($NoLink) { $ArgsList += "-NoLink" }
 if ($SkipSetup) { $ArgsList += "-SkipSetup" }
 
-powershell @ArgsList
+Invoke-CheckedNative "powershell" $ArgsList "SkillOS install script failed"

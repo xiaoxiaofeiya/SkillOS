@@ -2,6 +2,12 @@
 
 Command-line interface for SkillOS.
 
+Preview install after npm publish:
+
+```bash
+npm install -g @skillos/cli@preview
+```
+
 Common commands:
 
 ```bash

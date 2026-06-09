@@ -6,6 +6,8 @@ If you are new to SkillOS, start with [Product Overview](product-overview.md) fi
 
 Language options are available in [Languages](languages.md).
 
+Developer platform publishing notes are available in [Publishing Platforms](publishing-platforms.md).
+
 There are two layers:
 
 - **Agent-facing layer**: `skills/skillos/SKILL.md`, installable with Agent Skills CLI or Claude Code plugin marketplace.

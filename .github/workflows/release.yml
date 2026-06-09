@@ -40,6 +40,9 @@ jobs:
       - name: Verify network installation paths
         run: npm run verify:install:network
 
+      - name: Verify publish readiness
+        run: npm run verify:publish-readiness
+
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:

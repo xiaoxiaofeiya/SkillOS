@@ -80,3 +80,12 @@ skillos explain --last
 ```
 
 Lire ensuite [Product Overview](../../product-overview.md) et [Installation](../../installation.md).
+
+## Où installer
+
+- Agent Skills / skills.sh : `npx skills add xiaoxiaofeiya/SkillOS -g`
+- Claude Code : `/plugin marketplace add xiaoxiaofeiya/SkillOS`, puis `/plugin install skillos`
+- GitHub Release : telecharger `skillos.zip` depuis `v0.1.0-preview.1`
+- npm preview : `npm install -g @skillos/cli@preview` apres publication npm
+- MCP server : `npx @skillos/mcp-server@preview` apres publication npm
+- OpenClaw / ClawHub : voir `docs/publishing-platforms.md`

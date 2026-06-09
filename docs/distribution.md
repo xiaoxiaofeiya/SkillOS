@@ -1,6 +1,6 @@
 # SkillOS Distribution Guide
 
-For product context before packaging or installing, read [Product Overview](product-overview.md) and [Market Context](market-context.md). Language options are available in [Languages](languages.md).
+For product context before packaging or installing, read [Product Overview](product-overview.md), [Market Context](market-context.md), and [Publishing Platforms](publishing-platforms.md). Language options are available in [Languages](languages.md).
 
 SkillOS is distributed in two layers:
 

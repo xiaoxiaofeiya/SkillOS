@@ -11,7 +11,7 @@
     {
       "name": "skillos",
       "description": "Local-first skill orchestration for coding agents: inventory, routing, skill chains, MCP tools, presets, evals, and safety-aware decisions.",
-      "version": "0.1.0",
+      "version": "0.1.0-preview.1",
       "author": {
         "name": "xiaoxiaofeiya",
         "url": "https://github.com/xiaoxiaofeiya"

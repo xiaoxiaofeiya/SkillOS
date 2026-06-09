@@ -1,6 +1,6 @@
 {
   "name": "@skillos/cli",
-  "version": "0.1.0",
+  "version": "0.1.0-preview.1",
   "description": "Command-line interface for SkillOS setup, inventory, routing, presets, evals, and pack verification.",
   "license": "MIT",
   "repository": {
@@ -21,9 +21,9 @@
     }
   },
   "dependencies": {
-    "@skillos/core": "0.1.0",
-    "@skillos/adapters": "0.1.0",
-    "@skillos/mcp-server": "0.1.0"
+    "@skillos/core": "0.1.0-preview.1",
+    "@skillos/adapters": "0.1.0-preview.1",
+    "@skillos/mcp-server": "0.1.0-preview.1"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json"

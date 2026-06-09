@@ -192,7 +192,12 @@ async function verifyZipInstall() {
       "skillos/skills/skillos/SKILL.md",
       "skillos/.claude-plugin/marketplace.json",
       "skillos/.codex-plugin/plugin.json",
-      "skillos/.agents/plugins/marketplace.json"
+      "skillos/.agents/plugins/marketplace.json",
+      "skillos/server.json",
+      "skillos/docs/publishing-platforms.md",
+      "skillos/docs/launch-checklist.md",
+      "skillos/docs/mcp-distribution.md",
+      "skillos/docs/community-launch-kit.md"
     ];
     const forbidden = [
       /(^|\/)\.skillos(\/|$)/,
@@ -305,6 +310,11 @@ async function verifyGitHubBootstrap() {
         "--skip-setup"
       ], { cwd: repoRoot, env: { ...env, SKILLOS_INSTALL_DIR: installDir }, timeoutMs: 360000 });
     }
+    assert(existsSync(join(installDir, "package.json")), "GitHub bootstrap did not create a runnable SkillOS checkout.", {
+      installDir,
+      missing: join(installDir, "package.json"),
+      bootstrap
+    });
     const doctor = run("node", ["packages/cli/dist/index.js", "doctor", "--format", "json"], {
       cwd: installDir,
       env,

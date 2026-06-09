@@ -1,6 +1,6 @@
 {
   "name": "skillos-workspace",
-  "version": "0.1.0",
+  "version": "0.1.0-preview.1",
   "private": true,
   "description": "Local-first skill orchestration layer for coding agents.",
   "license": "MIT",
@@ -26,7 +26,10 @@
     "pack:npm": "npm pack --dry-run --workspaces",
     "verify:install": "node scripts/verify-installation.mjs",
     "verify:install:network": "node scripts/verify-installation.mjs --network --network-only",
-    "release:local": "npm test && npm run pack:zip && npm run pack:verify && npm run pack:npm && npm run verify:install",
+    "verify:publish-readiness": "node scripts/verify-publish-readiness.mjs",
+    "publish:preview:dry-run": "node scripts/publish-preview.mjs --dry-run",
+    "publish:preview:live": "node scripts/publish-preview.mjs --confirm-live",
+    "release:local": "npm test && npm run pack:zip && npm run pack:verify && npm run pack:npm && npm run verify:install && npm run verify:publish-readiness",
     "doctor": "node packages/cli/dist/index.js doctor",
     "inventory": "node packages/cli/dist/index.js inventory",
     "recommend": "node packages/cli/dist/index.js recommend"
