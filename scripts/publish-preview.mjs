@@ -223,7 +223,11 @@ async function publishNpmPackages() {
     } catch (err) {
       allAvailable = false;
       const text = JSON.stringify(errorDetails(err)).toLowerCase();
-      if (/permission|forbidden|scope|payment|required|not authorized|unauthorized|403|404/.test(text)) {
+      if (/two-factor|2fa|otp|one-time|granular access token/.test(text)) {
+        add(`npm:${workspace}`, "skipped", { reason: "2fa_required", details: summarizeError(err) });
+      } else if (/auth|login|credential|not authorized|unauthorized|401/.test(text)) {
+        add(`npm:${workspace}`, "skipped", { reason: "auth_missing", details: summarizeError(err) });
+      } else if (/permission|forbidden|scope|payment|required|403|404/.test(text)) {
         add(`npm:${workspace}`, "skipped", { reason: "scope_unavailable", details: summarizeError(err) });
       } else {
         add(`npm:${workspace}`, "fail", errorDetails(err));
